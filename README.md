@@ -1,4 +1,4 @@
-# LafiyaCare *(logo.png)*
+# LafiyaCare 
 
 🎯 **LafiyaCare** est une application mobile Android qui permet aux citoyens du **Niger** de localiser rapidement les **pharmacies de garde** ouvertes 24h/24, en particulier dans les contextes d’urgence où l'accès à l'information est souvent limité.
 
@@ -14,7 +14,7 @@ Offrir une solution simple, rapide et accessible à tous pour :
 
 ## 📱 Captures d'écran
 
-*(à ajouter plus tard)*
+![LaFiya Care](lafiya_care.png)
 
 ---
 
