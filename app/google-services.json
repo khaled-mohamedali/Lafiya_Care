@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "787945298456",
+    "project_id": "lafiyacare-c9237",
+    "storage_bucket": "lafiyacare-c9237.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:787945298456:android:73b04653dc49df6aacc16d",
+        "android_client_info": {
+          "package_name": "net.devcircuit.lafiyacare"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJ-QTYeFU7SvlOvmjXz1XF_Nbv-HKmoOA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
