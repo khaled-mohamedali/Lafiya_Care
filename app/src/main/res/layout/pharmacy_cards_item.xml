@@ -74,6 +74,23 @@
                 app:layout_constraintStart_toEndOf="@+id/imageView4"
                 app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
+            <TextView
+                android:id="@+id/emergency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/badge"
+
+                android:padding="2.5dp"
+                android:text="De Garde"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView7"
+                app:layout_constraintTop_toTopOf="@+id/textView7" />
+
             <ImageView
                 android:id="@+id/imageView5"
                 android:layout_width="25dp"
