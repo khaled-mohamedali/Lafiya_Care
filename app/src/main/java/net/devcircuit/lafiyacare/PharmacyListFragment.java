@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,9 +21,7 @@ public class PharmacyListFragment extends Fragment {
 
     ArrayList<Pharmacy> pharmacyList;
 
-    ArrayAdapter<Pharmacy> adapter;
-
-    ListView listView;
+    RecyclerView recyclerView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,7 +29,7 @@ public class PharmacyListFragment extends Fragment {
         pharmacyList = new ArrayList<>();
         // Add Pharmacy instances to the list
         pharmacyList.add(new Pharmacy("Pharmacie Ridwane"));
-        pharmacyList.add(new Pharmacy("Pharmacie Recasement"));
+        pharmacyList.add(new Pharmacy("Pharmacie Recasement Recasement"));
         pharmacyList.add(new Pharmacy("Pharmacie Sixième"));
         pharmacyList.add(new Pharmacy("Pharmacie des Arènes"));
         pharmacyList.add(new Pharmacy("Pharmacie de l’Avenir"));
@@ -43,10 +43,18 @@ public class PharmacyListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        listView = view.findViewById(R.id.listView);
+        recyclerView = view.findViewById(R.id.recyclerView);
 
-        adapter = new ArrayAdapter<>(requireContext(), android.R.layout.simple_list_item_1, pharmacyList);
-        listView.setAdapter(adapter);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
+
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setHasFixedSize(true);
+
+        PharmacyAdapter adapter = new PharmacyAdapter(pharmacyList);
+
+        recyclerView.setAdapter(adapter);
+
+
     }
 
     @Override
