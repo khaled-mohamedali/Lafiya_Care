@@ -6,7 +6,7 @@ public class Pharmacy {
 
 
         private String name;
-        private String address;
+        private Address address;
         private String phone;
         private String openHours;
         private boolean isOpenNow;
@@ -19,7 +19,7 @@ public class Pharmacy {
         }
 
         // Constructor
-        public Pharmacy(String name, String address, String phone, String openHours, boolean isOpenNow,
+        public Pharmacy(String name, Address address, String phone, String openHours, boolean isOpenNow,
                         double distanceKm, double rating,
                         String imageUrl, boolean isEmergency) {
             this.name = name;
@@ -43,11 +43,11 @@ public class Pharmacy {
             this.name = name;
         }
 
-        public String getAddress() {
+        public Address getAddress() {
             return address;
         }
 
-        public void setAddress(String address) {
+        public void setAddress(Address address) {
             this.address = address;
         }
 
