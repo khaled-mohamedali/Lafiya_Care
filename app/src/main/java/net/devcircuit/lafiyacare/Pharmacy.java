@@ -7,7 +7,6 @@ public class Pharmacy {
         private Address address;
         private String phone;
         private String openHours;
-
         private double rating;
         private boolean isEmergency;
         public Pharmacy(String name){

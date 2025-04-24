@@ -15,40 +15,38 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 
 public class PharmacyListFragment extends Fragment {
 
 
-    ArrayList<Pharmacy> pharmacyList;
+   private ArrayList<Pharmacy> pharmacyList;
 
     RecyclerView recyclerView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-            getData();
-        pharmacyList = new ArrayList<>();
-        // Add Pharmacy instances to the list
-        pharmacyList.add(new Pharmacy("Pharmacie Ridwane"));
-        pharmacyList.add(new Pharmacy("Pharmacie Recasement Recasement"));
-        pharmacyList.add(new Pharmacy("Pharmacie Sixième"));
-        pharmacyList.add(new Pharmacy("Pharmacie des Arènes"));
-        pharmacyList.add(new Pharmacy("Pharmacie de l’Avenir"));
-        pharmacyList.add(new Pharmacy("Pharmacie Cité BECEAO"));
-        pharmacyList.add(new Pharmacy("Pharmacie EL NASR"));
-        pharmacyList.add(new Pharmacy("Pharmacie Sira"));
+
 
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
+
+
 
         recyclerView = view.findViewById(R.id.recyclerView);
 
@@ -57,9 +55,16 @@ public class PharmacyListFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setHasFixedSize(true);
 
-        PharmacyAdapter adapter = new PharmacyAdapter(pharmacyList);
+        getData(new PharmacyCallback() {
+            @Override
+            public void onCallback(ArrayList<Pharmacy> pharmacies) {
+                pharmacyList = pharmacies;
+                PharmacyAdapter adapter = new PharmacyAdapter(pharmacyList);
 
-        recyclerView.setAdapter(adapter);
+                recyclerView.setAdapter(adapter);
+            }
+        });
+
 
 
     }
@@ -71,25 +76,33 @@ public class PharmacyListFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_pharmacy_list, container, false);
     }
 
-    public void getData(){
+    public void getData(PharmacyCallback callback){
         //Connecting to firebase
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+        ArrayList<Pharmacy> pharmacyList = new ArrayList<>();
+
         //Getting the data from firebase
-        db.collection("pharmacies")
+            db.collection("pharmacies_niamey")
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for(QueryDocumentSnapshot document : task.getResult()){
-                                Log.d("TAGIR", document.getId() + " => " + document.getData());
-                            }
-                        }else{
-                            Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+                        for(QueryDocumentSnapshot document : queryDocumentSnapshots){
+                            String json = gson.toJson(document.getData());
+                            Pharmacy pharmacy = gson.fromJson(json, Pharmacy.class);
+                            pharmacyList.add(pharmacy);
                         }
+                        callback.onCallback(pharmacyList);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getContext(), e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
-
     }
 }
