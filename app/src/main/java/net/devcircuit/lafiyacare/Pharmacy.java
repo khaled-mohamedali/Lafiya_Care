@@ -3,16 +3,12 @@ import java.util.List;
 
 public class Pharmacy {
 
-
-
         private String name;
         private Address address;
         private String phone;
         private String openHours;
-        private boolean isOpenNow;
-        private double distanceKm;
+
         private double rating;
-        private String imageUrl;
         private boolean isEmergency;
         public Pharmacy(String name){
             this.name = name;
@@ -26,11 +22,7 @@ public class Pharmacy {
             this.address = address;
             this.phone = phone;
             this.openHours = openHours;
-            this.isOpenNow = isOpenNow;
-            this.distanceKm = distanceKm;
             this.rating = rating;
-
-            this.imageUrl = imageUrl;
             this.isEmergency = isEmergency;
         }
 
@@ -67,22 +59,6 @@ public class Pharmacy {
             this.openHours = openHours;
         }
 
-        public boolean isOpenNow() {
-            return isOpenNow;
-        }
-
-        public void setOpenNow(boolean openNow) {
-            isOpenNow = openNow;
-        }
-
-        public double getDistanceKm() {
-            return distanceKm;
-        }
-
-        public void setDistanceKm(double distanceKm) {
-            this.distanceKm = distanceKm;
-        }
-
         public double getRating() {
             return rating;
         }
@@ -91,14 +67,6 @@ public class Pharmacy {
             this.rating = rating;
         }
 
-
-        public String getImageUrl() {
-            return imageUrl;
-        }
-
-        public void setImageUrl(String imageUrl) {
-            this.imageUrl = imageUrl;
-        }
 
         public boolean isEmergency() {
             return isEmergency;
