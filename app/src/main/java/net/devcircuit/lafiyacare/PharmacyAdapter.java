@@ -1,5 +1,6 @@
 package net.devcircuit.lafiyacare;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
@@ -45,26 +46,38 @@ public class PharmacyAdapter extends RecyclerView.Adapter<PharmacyAdapter.Pharma
             holder.status.setTextColor(status.equals("Ouvert") ? holder.itemView.getContext().getColor(R.color.green) : holder.itemView.getContext().getColor(R.color.red));
 
 
-//            Make a call to the pharmacy
+            // Get direction to the pharmacy
+            holder.pharmacyAddress.setOnClickListener(v -> {
+                Address address = pharmacy.getAddress();
+
+                Uri gmmIntentUri = Uri.parse("google.navigation:q="+address.getLatitude()+","+ address.getLongitude());
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+
+           try {
+               v.getContext().startActivity(mapIntent);
+           }catch (ActivityNotFoundException e){
+               Toast.makeText(v.getContext(), "Google Maps n'est pas installé", Toast.LENGTH_SHORT).show();
+           }
+//
+            });
+
+//           Make a call to the pharmacy
             holder.phone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // Handle the call action here
-                    // You can use an Intent to initiate a phone call
-                    // For example:
+
                     //Get the number
                     String phoneNumber = pharmacy.getPhone();
 
                     // Check if valid phone number
-
                     if (!phoneNumber.isEmpty()) {
                         Intent callIntent = new Intent(Intent.ACTION_DIAL);
                         callIntent.setData(Uri.parse("tel:" + phoneNumber));
                         v.getContext().startActivity(callIntent);
-                        Toast.makeText(v.getContext(), phoneNumber, Toast.LENGTH_SHORT).show();
                     }else {
                         //Create a toast saying that the phone number is not valid
-                        Toast.makeText(v.getContext(), "Numéro de téléphone non valide", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(v.getContext(), "La Pharmcie n'a pas de numéro de téléphone", Toast.LENGTH_SHORT).show();
                     }
 
                 }
@@ -92,6 +105,7 @@ public class PharmacyAdapter extends RecyclerView.Adapter<PharmacyAdapter.Pharma
             badge = itemView.findViewById(R.id.emergency);
             rating = itemView.findViewById(R.id.rating);
             phone = itemView.findViewById(R.id.phone);
+
         }
     }
 
