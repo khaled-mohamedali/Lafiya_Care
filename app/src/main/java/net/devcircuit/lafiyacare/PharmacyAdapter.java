@@ -14,6 +14,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.apache.commons.text.WordUtils;
+
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -37,7 +39,8 @@ public class PharmacyAdapter extends RecyclerView.Adapter<PharmacyAdapter.Pharma
     @Override
     public void onBindViewHolder(@NonNull PharmacyViewHolder holder, int position) {
             Pharmacy pharmacy = pharmacies.get(position);
-            holder.pharmacyName.setText(pharmacy.getName());
+            String formattedName = WordUtils.capitalizeFully(pharmacy.getName());
+            holder.pharmacyName.setText(formattedName);
             holder.openingHours.setText(pharmacy.getOpenHours());
             holder.badge.setVisibility(pharmacy.isEmergency() ? View.VISIBLE : View.GONE);
             holder.rating.setText(String.valueOf(pharmacy.getRating()));

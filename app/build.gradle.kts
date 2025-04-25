@@ -45,4 +45,5 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-firestore")
     implementation ("com.google.code.gson:gson:2.13.1")
+    implementation ("org.apache.commons:commons-text:1.10.0")
 }
