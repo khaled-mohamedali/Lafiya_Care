@@ -1,9 +1,14 @@
 package net.devcircuit.lafiyacare;
 
+import android.content.Intent;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,12 +40,35 @@ public class PharmacyAdapter extends RecyclerView.Adapter<PharmacyAdapter.Pharma
             holder.openingHours.setText(pharmacy.getOpenHours());
             holder.badge.setVisibility(pharmacy.isEmergency() ? View.VISIBLE : View.GONE);
             holder.rating.setText(String.valueOf(pharmacy.getRating()));
-
             String status = getPharmacyStatus(pharmacy.getOpenHours());
             holder.status.setText(status);
             holder.status.setTextColor(status.equals("Ouvert") ? holder.itemView.getContext().getColor(R.color.green) : holder.itemView.getContext().getColor(R.color.red));
 
 
+//            Make a call to the pharmacy
+            holder.phone.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Handle the call action here
+                    // You can use an Intent to initiate a phone call
+                    // For example:
+                    //Get the number
+                    String phoneNumber = pharmacy.getPhone();
+
+                    // Check if valid phone number
+
+                    if (!phoneNumber.isEmpty()) {
+                        Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                        callIntent.setData(Uri.parse("tel:" + phoneNumber));
+                        v.getContext().startActivity(callIntent);
+                        Toast.makeText(v.getContext(), phoneNumber, Toast.LENGTH_SHORT).show();
+                    }else {
+                        //Create a toast saying that the phone number is not valid
+                        Toast.makeText(v.getContext(), "Numéro de téléphone non valide", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            });
 
 
     }
@@ -53,6 +81,7 @@ public class PharmacyAdapter extends RecyclerView.Adapter<PharmacyAdapter.Pharma
     public static class PharmacyViewHolder extends RecyclerView.ViewHolder{
 
        TextView pharmacyName, pharmacyAddress, openingHours,status,badge,rating;
+       ImageView phone;
 
         public PharmacyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -62,6 +91,7 @@ public class PharmacyAdapter extends RecyclerView.Adapter<PharmacyAdapter.Pharma
             openingHours = itemView.findViewById(R.id.openingHours);
             badge = itemView.findViewById(R.id.emergency);
             rating = itemView.findViewById(R.id.rating);
+            phone = itemView.findViewById(R.id.phone);
         }
     }
 

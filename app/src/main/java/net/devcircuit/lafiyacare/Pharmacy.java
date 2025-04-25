@@ -25,6 +25,7 @@ public class Pharmacy {
             this.isEmergency = isEmergency;
         }
 
+
         // Getters and Setters
         public String getName() {
             return name;
