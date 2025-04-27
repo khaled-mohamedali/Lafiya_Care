@@ -9,12 +9,14 @@ public class Pharmacy {
         private String openHours;
         private double rating;
         private boolean isEmergency;
+
+        private  String placeId;
         public Pharmacy(String name){
             this.name = name;
         }
 
         // Constructor
-        public Pharmacy(String name, Address address, String phone, String openHours, boolean isOpenNow,
+        public Pharmacy(String placeId,String name, Address address, String phone, String openHours, boolean isOpenNow,
                         double distanceKm, double rating,
                         String imageUrl, boolean isEmergency) {
             this.name = name;
@@ -22,11 +24,19 @@ public class Pharmacy {
             this.phone = phone;
             this.openHours = openHours;
             this.rating = rating;
+            this.placeId = placeId;
             this.isEmergency = isEmergency;
         }
 
+    public String getPlaceId() {
+        return placeId;
+    }
 
-        // Getters and Setters
+    public void setPlaceId(String placeId) {
+        this.placeId = placeId;
+    }
+
+    // Getters and Setters
         public String getName() {
             return name;
         }
@@ -76,9 +86,13 @@ public class Pharmacy {
             isEmergency = emergency;
         }
 
-        public String toString() {
-            return this.name;
-        }
+    @Override
+    public String toString() {
+        return "Pharmacy{" +
+                "name='" + name + '\'' +
+                ", isEmergency=" + isEmergency +
+                '}';
+    }
 }
 
 

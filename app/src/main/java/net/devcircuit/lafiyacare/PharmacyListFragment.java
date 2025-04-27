@@ -60,7 +60,6 @@ public class PharmacyListFragment extends Fragment {
             public void onCallback(ArrayList<Pharmacy> pharmacies) {
                 pharmacyList = pharmacies;
                 PharmacyAdapter adapter = new PharmacyAdapter(pharmacyList);
-
                 recyclerView.setAdapter(adapter);
             }
         });
@@ -95,7 +94,30 @@ public class PharmacyListFragment extends Fragment {
                             Pharmacy pharmacy = gson.fromJson(json, Pharmacy.class);
                             pharmacyList.add(pharmacy);
                         }
-                        callback.onCallback(pharmacyList);
+
+                        //get the list of IDs of the emergencies pharmacies from firebase
+
+                        db.collection("pharmacies_de_garde")
+                                .document("current")
+                                        .get()
+                                                .addOnSuccessListener(gardeDoc -> {
+                                                    if(gardeDoc.exists()) {
+                                                        ArrayList<String> pharmacyIds =  (ArrayList<String>)(gardeDoc.get("placesIDs"));
+
+                                                        for (Pharmacy pharmacy : pharmacyList) {
+                                                            if (pharmacyIds.contains(pharmacy.getPlaceId())) {
+                                                                pharmacy.setEmergency(true);
+                                                            } else {
+                                                                pharmacy.setEmergency(false);
+                                                            }
+
+                                                        }
+                                                    }
+
+                                                    callback.onCallback(pharmacyList);
+                                                });
+
+
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
