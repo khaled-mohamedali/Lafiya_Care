@@ -17,17 +17,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <EditText
-            android:id="@+id/search_editText"
+        <SearchView
+            android:id="@+id/search"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:background="@drawable/search_bar_style"
-            android:drawableEnd="@drawable/search"
-            android:ems="10"
-            android:hint="Saisisser le nom d’une pharmacie..."
             android:inputType="text"
             android:paddingStart="20dp"
             android:paddingEnd="20dp" />

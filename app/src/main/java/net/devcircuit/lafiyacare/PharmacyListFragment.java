@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -32,6 +33,8 @@ public class PharmacyListFragment extends Fragment {
    private ArrayList<Pharmacy> pharmacyList;
 
     RecyclerView recyclerView;
+    SearchView searchView;
+    PharmacyAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,11 +47,24 @@ public class PharmacyListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
-
-
-
         recyclerView = view.findViewById(R.id.recyclerView);
+        searchView = view.findViewById(R.id.search);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(adapter != null){
+                    adapter.getFilter().filter(newText);
+                }
+                return false;
+            }
+        });
+
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext());
 
@@ -59,7 +75,7 @@ public class PharmacyListFragment extends Fragment {
             @Override
             public void onCallback(ArrayList<Pharmacy> pharmacies) {
                 pharmacyList = pharmacies;
-                PharmacyAdapter adapter = new PharmacyAdapter(pharmacyList);
+                 adapter = new PharmacyAdapter(pharmacyList);
                 recyclerView.setAdapter(adapter);
             }
         });

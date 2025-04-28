@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,11 +22,15 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
-public class PharmacyAdapter extends RecyclerView.Adapter<PharmacyAdapter.PharmacyViewHolder>{
+public class PharmacyAdapter extends RecyclerView.Adapter<PharmacyAdapter.PharmacyViewHolder>implements Filterable {
 
     ArrayList<Pharmacy> pharmacies;
+    private ArrayList<Pharmacy> pharmaciesFull; // backup copy for filtering
+
     public PharmacyAdapter(ArrayList<Pharmacy> pharmacies){
         this.pharmacies = pharmacies;
+        this.pharmaciesFull = new ArrayList<>(pharmacies);
+
     }
 
     @NonNull
@@ -93,6 +99,46 @@ public class PharmacyAdapter extends RecyclerView.Adapter<PharmacyAdapter.Pharma
     public int getItemCount() {
         return this.pharmacies.size();
     }
+
+    @Override
+    public Filter getFilter() {
+        return pharmacyFilter;
+    }
+
+    private Filter pharmacyFilter = new Filter() {
+
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            ArrayList<Pharmacy> filteredList = new ArrayList<>();
+
+            if (constraint == null || constraint.length() == 0) {
+                        filteredList.addAll(pharmaciesFull);
+            }else{
+                String filterPattern = constraint.toString().toLowerCase().trim();
+
+                for(Pharmacy item: pharmaciesFull){
+                    if (item.getName().toLowerCase().contains(filterPattern)) {
+                        filteredList.add(item);
+                    }
+                }
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+
+
+            return results;
+        }
+
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+
+            pharmacies.clear();
+            pharmacies.addAll((ArrayList<Pharmacy>) results.values);
+            notifyDataSetChanged();
+        }
+    };
 
     public static class PharmacyViewHolder extends RecyclerView.ViewHolder{
 
