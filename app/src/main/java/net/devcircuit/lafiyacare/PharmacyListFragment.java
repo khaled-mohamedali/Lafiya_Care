@@ -10,8 +10,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -26,6 +29,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 public class PharmacyListFragment extends Fragment {
 
@@ -35,6 +40,8 @@ public class PharmacyListFragment extends Fragment {
     RecyclerView recyclerView;
     SearchView searchView;
     PharmacyAdapter adapter;
+
+    ImageView sortMenu;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,6 +56,16 @@ public class PharmacyListFragment extends Fragment {
 
         recyclerView = view.findViewById(R.id.recyclerView);
         searchView = view.findViewById(R.id.search);
+        sortMenu = view.findViewById(R.id.sortBtn);
+
+
+
+        sortMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    showSortMenu(v);
+            }
+        });
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -91,6 +108,43 @@ public class PharmacyListFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_pharmacy_list, container, false);
     }
 
+    public void showSortMenu(View anchor){
+        PopupMenu popupMenu = new PopupMenu(requireContext(), anchor);
+
+        popupMenu.getMenuInflater().inflate(R.menu.sorting_menu,popupMenu.getMenu());
+
+        popupMenu.setOnMenuItemClickListener(item -> {
+
+            int id = item.getItemId();
+            if (id == R.id.sort_by_name) {
+                sortByName();
+                return true;
+            }else if (id==R.id.sort_by_garde){
+                sortByGarde();
+                return true;
+            }
+            return false;
+        });
+        popupMenu.show();
+    }
+
+    public void sortByName(){
+        pharmacyList.sort((o1, o2) -> o1.getName().compareTo(o2.getName()));
+        adapter.notifyDataSetChanged();
+    }
+
+    public void sortByGarde(){
+        pharmacyList.sort((o1, o2) -> {
+            if (o1.isEmergency() && !o2.isEmergency()) {
+                return -1; // o1 emergency, o2 normal -> o1 comes first
+            } else if (!o1.isEmergency() && o2.isEmergency()) {
+                return 1; // o1 normal, o2 emergency -> o2 comes first
+            } else {
+                return 0; // both same (both emergency or both normal) -> no change
+            }
+        });
+        adapter.notifyDataSetChanged();
+    }
     public void getData(PharmacyCallback callback){
         //Connecting to firebase
         FirebaseFirestore db = FirebaseFirestore.getInstance();
