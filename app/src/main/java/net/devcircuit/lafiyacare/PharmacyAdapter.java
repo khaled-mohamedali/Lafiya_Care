@@ -25,7 +25,7 @@ import java.util.ArrayList;
 public class PharmacyAdapter extends RecyclerView.Adapter<PharmacyAdapter.PharmacyViewHolder>implements Filterable {
 
     ArrayList<Pharmacy> pharmacies;
-    private ArrayList<Pharmacy> pharmaciesFull; // backup copy for filtering
+    private final ArrayList<Pharmacy> pharmaciesFull; // backup copy for filtering
 
     public PharmacyAdapter(ArrayList<Pharmacy> pharmacies){
         this.pharmacies = pharmacies;
@@ -47,7 +47,6 @@ public class PharmacyAdapter extends RecyclerView.Adapter<PharmacyAdapter.Pharma
             Pharmacy pharmacy = pharmacies.get(position);
             String formattedName = WordUtils.capitalizeFully(pharmacy.getName());
             holder.pharmacyName.setText(formattedName);
-            holder.openingHours.setText(pharmacy.getOpenHours());
             holder.badge.setVisibility(pharmacy.isEmergency() ? View.VISIBLE : View.GONE);
             holder.rating.setText(String.valueOf(pharmacy.getRating()));
             String status = getPharmacyStatus(pharmacy.getOpenHours(),pharmacy);
@@ -76,18 +75,15 @@ public class PharmacyAdapter extends RecyclerView.Adapter<PharmacyAdapter.Pharma
                 @Override
                 public void onClick(View v) {
 
-                    //Get the number
-                    String phoneNumber = pharmacy.getPhone();
-
-                    // Check if valid phone number
-                    if (!phoneNumber.isEmpty()) {
-                        Intent callIntent = new Intent(Intent.ACTION_DIAL);
-                        callIntent.setData(Uri.parse("tel:" + phoneNumber));
-                        v.getContext().startActivity(callIntent);
-                    }else {
-                        //Create a toast saying that the phone number is not valid
-                        Toast.makeText(v.getContext(), "La Pharmcie n'a pas de numéro de téléphone", Toast.LENGTH_SHORT).show();
+                    //Check if number is null or empty
+                    if (pharmacy.getPhone() == null || pharmacy.getPhone().trim().isEmpty()) {
+                        Toast.makeText(v.getContext(), "La Pharmacie n'a pas de numéro de téléphone", Toast.LENGTH_SHORT).show();
+                        return;
                     }
+
+                    Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                    callIntent.setData(Uri.parse("tel:" + pharmacy.getPhone()));
+                    v.getContext().startActivity(callIntent);
 
                 }
             });
@@ -162,7 +158,6 @@ public class PharmacyAdapter extends RecyclerView.Adapter<PharmacyAdapter.Pharma
         if (openingHours == null || !openingHours.contains("-")) {
             return "Heures non disponibles";
         }
-
         try {
             String[] parts = openingHours.split("-");
             String openTimeStr = parts[0].trim().replace("h", ":");
@@ -173,6 +168,8 @@ public class PharmacyAdapter extends RecyclerView.Adapter<PharmacyAdapter.Pharma
             LocalTime closeTime = LocalTime.parse(closeTimeStr, formatter);
 
             LocalTime now = LocalTime.now();
+
+
 
 
             if ((!now.isBefore(openTime) && now.isBefore(closeTime))|| pharmacy.isEmergency()) {
