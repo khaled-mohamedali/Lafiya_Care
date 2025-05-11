@@ -1,16 +1,7 @@
 package net.devcircuit.lafiyacare;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -18,10 +9,14 @@ import android.widget.PopupMenu;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -29,8 +24,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class PharmacyListFragment extends Fragment {
 
@@ -172,16 +167,22 @@ public class PharmacyListFragment extends Fragment {
                                         .get()
                                                 .addOnSuccessListener(gardeDoc -> {
                                                     if(gardeDoc.exists()) {
-                                                        ArrayList<String> pharmacyIds =  (ArrayList<String>)(gardeDoc.get("placesIDs"));
 
-                                                        for (Pharmacy pharmacy : pharmacyList) {
-                                                            if (pharmacyIds.contains(pharmacy.getPlaceId())) {
-                                                                pharmacy.setEmergency(true);
-                                                            } else {
-                                                                pharmacy.setEmergency(false);
+                                                        EmergencyResponse emergenciesPharmacies = gardeDoc.toObject(EmergencyResponse.class);
+
+                                                            //Extracting the emergency pharmacies IDs
+                                                            assert emergenciesPharmacies != null;
+                                                            Set<String> pharmacyIds = emergenciesPharmacies.getEmergencies().stream()
+                                                                    .map(EmergencyPharmacy::getId)
+                                                                    .collect(Collectors.toSet());
+
+
+                                                            for (Pharmacy pharmacy : pharmacyList) {
+                                                                pharmacy.setEmergency(pharmacyIds.contains(pharmacy.getPlaceId()));
+
                                                             }
 
-                                                        }
+
                                                     }
 
                                                     callback.onCallback(pharmacyList);
