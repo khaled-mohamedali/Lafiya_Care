@@ -51,7 +51,8 @@ public class PharmacyAdapter extends RecyclerView.Adapter<PharmacyAdapter.Pharma
             holder.rating.setText(String.valueOf(pharmacy.getRating()));
             String status = getPharmacyStatus(pharmacy.getOpenHours(),pharmacy);
             holder.status.setText(status);
-            holder.status.setTextColor(status.equals("Ouvert") ? holder.itemView.getContext().getColor(R.color.green) : holder.itemView.getContext().getColor(R.color.red));
+            holder.openingHours.setText(pharmacy.getOpenHours());
+            holder.status.setTextColor(status.equals("Ouverte") ? holder.itemView.getContext().getColor(R.color.green) : holder.itemView.getContext().getColor(R.color.red));
 
 
             // Get direction to the pharmacy
@@ -172,8 +173,14 @@ public class PharmacyAdapter extends RecyclerView.Adapter<PharmacyAdapter.Pharma
 
 
 
-            if ((!now.isBefore(openTime) && now.isBefore(closeTime))|| pharmacy.isEmergency()) {
-                return "Ouvert";
+            if ((!now.isBefore(openTime) && now.isBefore(closeTime)) || pharmacy.isEmergency()) {
+
+                if (pharmacy.isEmergency()) {
+                    pharmacy.setOpenHours("24h/24");
+                    return "Ouverte";
+                }
+
+                return "Ouverte";
             } else {
                 return "Fermé";
             }
