@@ -23,6 +23,25 @@
           "other_platform_oauth_client": []
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:787945298456:android:1adae4ab9e9cd226acc16d",
+        "android_client_info": {
+          "package_name": "net.devcircuit.lafiyacare2025"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJ-QTYeFU7SvlOvmjXz1XF_Nbv-HKmoOA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
     }
   ],
   "configuration_version": "1"

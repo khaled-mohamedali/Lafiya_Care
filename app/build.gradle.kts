@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "net.devcircuit.lafiyacare"
+    namespace = "net.devcircuit.lafiyacare2025"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "net.devcircuit.lafiyacare"
+        applicationId = "net.devcircuit.lafiyacare2025"
         minSdk = 26
         targetSdk = 34
         versionCode = 1
